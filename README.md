@@ -10,10 +10,10 @@ The rake tasks allow you to use local MySQL for development. When you're ready t
 against it. See [usage](#usage) for details.
 
 ```
-rake psdb:migrate                                                                    # Migrate the database for current environment
-rake psdb:rollback                                                                   # Rollback primary database for current environment
-rake psdb:schema:load                                                                # Load the current schema into the database
-rake psdb:setup_pscale                                                               # Setup a proxy to connect to PlanetScale
+rake psdb:migrate                                      # Migrate the database for current environment
+rake psdb:rollback                                     # Rollback primary database for current environment
+rake psdb:schema:load                                  # Load the current schema into the database
+rake psdb:setup_pscale                                 # Setup a proxy to connect to PlanetScale
 ```
 
 ## Installation
