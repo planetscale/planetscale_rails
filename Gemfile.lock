@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     planetscale_rails (0.1.0)
-      rails (> 7.0)
+      rails (~> 7.0)
 
 GEM
   remote: https://rubygems.org/
@@ -108,6 +108,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.14.2-x86_64-darwin)
       racc (~> 1.4)
+    nokogiri (1.14.2-x86_64-linux)
+      racc (~> 1.4)
     parallel (1.22.1)
     parser (3.2.1.0)
       ast (~> 2.4.1)
@@ -184,6 +186,7 @@ GEM
 PLATFORMS
   x86_64-darwin-20
   x86_64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   planetscale_rails!
