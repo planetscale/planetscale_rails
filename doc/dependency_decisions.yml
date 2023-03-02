@@ -1,0 +1,37 @@
+---
+- - :permit
+  - MIT
+  - :who:
+    :why:
+    :versions: []
+    :when: 2023-03-02 18:39:34.628457000 Z
+- - :permit
+  - Apache 2.0
+  - :who:
+    :why:
+    :versions: []
+    :when: 2023-03-02 18:41:00.070547000 Z
+- - :permit
+  - Simplified BSB, ruby
+  - :who:
+    :why:
+    :versions: []
+    :when: 2023-03-02 18:47:46.186423000 Z
+- - :permit
+  - Simplified BSB
+  - :who:
+    :why:
+    :versions: []
+    :when: 2023-03-02 18:47:49.472823000 Z
+- - :permit
+  - ruby
+  - :who:
+    :why:
+    :versions: []
+    :when: 2023-03-02 18:47:54.139999000 Z
+- - :permit
+  - Simplified BSD
+  - :who:
+    :why:
+    :versions: []
+    :when: 2023-03-02 18:48:49.044186000 Z
