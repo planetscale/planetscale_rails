@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Rake tasks for running migrations on PlanetScale database branches"
   spec.homepage      = "https://github.com/planetscale/planetscale_rails"
-  spec.license       = "MIT"
+  spec.license       = "Apache-2.0"
   spec.required_ruby_version = ">= 3.0.0"
 
   spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/planetscale"
@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "rails", "> 7.0"
+  spec.add_dependency "rails", "~> 7.0"
 
   # For more information and examples about making a new gem, checkout our
   # guide at: https://bundler.io/guides/creating_gem.html
