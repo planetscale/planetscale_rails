@@ -4,6 +4,18 @@ Rake tasks for easily running Rails migrations against PlanetScale database bran
 
 For information on how to connect your Rails app to PlanetScale, please [see our guide here](https://planetscale.com/docs/tutorials/connect-rails-app).
 
+## Included rake tasks
+
+The rake tasks allow you to use local MySQL for development. When you're ready to make a schema change, you can create a PlanetScale branch and run migrations
+against it. See [usage](#usage) for details.
+
+```
+rake psdb:migrate                                                                    # Migrate the database for current environment
+rake psdb:rollback                                                                   # Rollback primary database for current environment
+rake psdb:schema:load                                                                # Load the current schema into the database
+rake psdb:setup_pscale                                                               # Setup a proxy to connect to PlanetScale
+```
+
 ## Installation
 
 Add this line to your application's Gemfile:
