@@ -22,6 +22,6 @@ jobs:
         with:
           ruby-version: 3.1.2
           bundler-cache: false
-      run: bundle install
+      - run: bundle install
       - run: gem install license_finder
       - run: license_finder

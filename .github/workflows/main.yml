@@ -12,6 +12,6 @@ jobs:
       with:
         ruby-version: 3.2.1
         bundler-cache: false
-      run: bundle install
+    - run: bundle install
     - name: Run the default task
       run: bundle exec rake
