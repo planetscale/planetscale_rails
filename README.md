@@ -1,5 +1,7 @@
 # PlanetScale Rails
 
+[![Gem Version](https://badge.fury.io/rb/planetscale_rails.svg)](https://badge.fury.io/rb/planetscale_rails)
+
 Rake tasks for easily running Rails migrations against PlanetScale database branches.
 
 For information on how to connect your Rails app to PlanetScale, please [see our guide here](https://planetscale.com/docs/tutorials/connect-rails-app).
