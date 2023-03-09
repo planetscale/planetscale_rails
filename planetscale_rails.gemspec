@@ -5,15 +5,16 @@ require_relative "lib/planetscale_rails/version"
 Gem::Specification.new do |spec|
   spec.name          = "planetscale_rails"
   spec.version       = PlanetscaleRails::VERSION
-  spec.authors       = ["Mike Coutermarsh"]
-  spec.email         = ["coutermarsh.mike@gmail.com"]
+  spec.authors       = ["Mike Coutermarsh", "Iheanyi Ekechukwu"]
+  spec.email         = ["coutermarsh.mike@gmail.com", "iekechukwu@gmail.com"]
 
-  spec.summary       = "Rake tasks for running migrations on PlanetScale database branches"
+  spec.summary       = "Make Rails migrations easy with PlanetScale"
+  spec.description   = "A collection of rake tasks to make managing schema migrations with PlanetScale easy"
   spec.homepage      = "https://github.com/planetscale/planetscale_rails"
   spec.license       = "Apache-2.0"
   spec.required_ruby_version = ">= 3.0.0"
 
-  spec.metadata["allowed_push_host"] = "https://rubygems.pkg.github.com/planetscale"
+  spec.metadata["allowed_push_host"] = "https://rubygems.org"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = spec.homepage
