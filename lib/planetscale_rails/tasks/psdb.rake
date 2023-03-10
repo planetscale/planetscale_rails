@@ -3,12 +3,23 @@
 require "English"
 require "yaml"
 require "pty"
+require "colorize"
 
 databases = ActiveRecord::Tasks::DatabaseTasks.setup_initial_database_yaml
 
 def shared_deps(name = nil)
   return [:environment, :check_ci, "setup_pscale:#{name}".to_sym] if name
   return %i[environment check_ci] if name.nil?
+end
+
+def puts_deploy_request_instructions
+  ps_config = YAML.load_file(".pscale.yml")
+  database = ps_config["database"]
+  branch = ps_config["branch"]
+  org = ps_config["org"]
+
+  puts "Create a deploy request for '#{branch}' by running:\n"
+  puts "     pscale deploy-request create #{database} #{branch} --org #{org}\n\n"
 end
 
 def kill_pscale_process
@@ -35,15 +46,14 @@ namespace :psdb do
     database = ps_config["database"]
     branch = ps_config["branch"]
 
-    raise "You must have `pscale` installed on your computer" unless command?("pscale")
+    raise "You must have `pscale` installed on your computer" unless command?("pscale").colorize(:red)
     if branch.blank? || database.blank?
-      raise "Your branch is not properly setup, please switch to a branch by using the CLI."
+      raise "Your branch is not properly setup, please switch to a branch by using the CLI.".colorize(:red)
     end
-    raise "Unable to run migrations against the main branch" if branch == "main"
 
     r, = PTY.open
 
-    puts "Spawning background connect process..."
+    puts "Connecting to PlanetScale..."
 
     # Spawns the process in the background
     pid = Process.spawn("pscale connect #{database} #{branch} --port 3305 #{ENV["SERVICE_TOKEN_CONFIG"]}", out: r)
@@ -59,10 +69,7 @@ namespace :psdb do
       time_elapsed = Time.current - start_time
     end
 
-    raise "Timed out waiting for PlanetScale connection to be established" if time_elapsed > 10.seconds
-
-    # Comment out for now, this messes up when running migrations.
-    # Kernel.system("bundle exec rails db:environment:set RAILS_ENV=development")
+    raise "Timed out waiting for PlanetScale connection to be established".colorize(:red) if time_elapsed > 10.seconds
   ensure
     r&.close
   end
@@ -89,7 +96,7 @@ namespace :psdb do
 
         r, = PTY.open
 
-        puts "Spawning background connect process..."
+        puts "Connecting to PlanetScale..."
 
         # Spawns the process in the background
         pid = Process.spawn("pscale connect #{database} #{branch} --port 3305 #{ENV["SERVICE_TOKEN_CONFIG"]}", out: r)
@@ -120,13 +127,13 @@ namespace :psdb do
     db_configs = ActiveRecord::Base.configurations.configs_for(env_name: ActiveRecord::Tasks::DatabaseTasks.env)
 
     unless db_configs.size == 1
-      raise "Found multiple database configurations, please specify which database you want to migrate using `psdb:migrate:<database_name>`"
+      raise "Found multiple database configurations, please specify which database you want to migrate using `psdb:migrate:<database_name>`".colorize(:red)
     end
 
     puts "Running migrations..."
     Kernel.system("bundle exec rails db:migrate")
-    puts "Finished running migrations"
-
+    puts "Finished running migrations\n".colorize(:green)
+    puts_deploy_request_instructions
   ensure
     kill_pscale_process
   end
@@ -139,7 +146,9 @@ namespace :psdb do
         # We run it using the Kernel.system here because this properly handles
         # when exceptions occur whereas Rake::Task.invoke does not.
         Kernel.system("bundle exec rake db:migrate:#{name}")
-        puts "Finished running migrations."
+
+        puts "Finished running migrations\n".colorize(:green)
+        puts_deploy_request_instructions
       ensure
         kill_pscale_process
       end
@@ -186,7 +195,7 @@ namespace :psdb do
         # We run it using the Kernel.system here because this properly handles
         # when exceptions occur whereas Rake::Task.invoke does not.
         Kernel.system("bundle exec rake db:rollback:#{name}")
-        puts "Finished rolling back migrations."
+        puts "Finished rolling back migrations.".colorize(:green)
       ensure
         kill_pscale_process
       end
