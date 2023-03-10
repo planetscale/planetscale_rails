@@ -29,7 +29,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "rails", "~> 7.0"
-
-  # For more information and examples about making a new gem, checkout our
-  # guide at: https://bundler.io/guides/creating_gem.html
+  spec.add_dependency "colorize", "~> 0.8.1"
 end

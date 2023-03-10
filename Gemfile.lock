@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    planetscale_rails (0.1.0)
+    planetscale_rails (0.1.1)
+      colorize (~> 0.8.1)
       rails (~> 7.0)
 
 GEM
@@ -74,6 +75,7 @@ GEM
       tzinfo (~> 2.0)
     ast (2.4.2)
     builder (3.2.4)
+    colorize (0.8.1)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
     date (3.3.3)
@@ -95,7 +97,7 @@ GEM
     marcel (1.0.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    minitest (5.17.0)
+    minitest (5.18.0)
     net-imap (0.3.4)
       date
       net-protocol
