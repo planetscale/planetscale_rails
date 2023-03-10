@@ -38,10 +38,12 @@ bundle install
 
 First, make sure you have the [`pscale` CLI installed](https://github.com/planetscale/cli#installation). You'll use `pscale` to create a new branch.
 
-1. `pscale branch switch my-new-branch-name --database my-db-name --create`
-
-Run this locally, it will create a new branch off of `main`. The `switch` command will update a `.pscale.yml` file to track 
+1. Run this locally, it will create a new branch off of `main`. The `switch` command will update a `.pscale.yml` file to track 
 that this is the branch you want to migrate.
+
+```
+pscale branch switch my-new-branch-name --database my-db-name --create
+```
 
 **Tip:** In your database settings. Enable "Automatically copy migration data." Select "Rails/Phoenix" as the migration framework. This will auto copy your `schema_migrations` table between branches.
 
