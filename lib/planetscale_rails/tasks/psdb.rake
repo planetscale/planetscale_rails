@@ -46,7 +46,7 @@ namespace :psdb do
     database = ps_config["database"]
     branch = ps_config["branch"]
 
-    raise "You must have `pscale` installed on your computer" unless command?("pscale").colorize(:red)
+    raise "You must have `pscale` installed on your computer".colorize(:red) unless command?("pscale")
     if branch.blank? || database.blank?
       raise "Your branch is not properly setup, please switch to a branch by using the CLI.".colorize(:red)
     end
