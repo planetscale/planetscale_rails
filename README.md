@@ -34,6 +34,22 @@ And then execute in your terminal:
 bundle install
 ```
 
+### Update database.yml
+
+In your application's `database.yml`, you'll need to make two changes. This will allow the app to run migrations via a connection setup by the pscale CLI.
+
+1. Swap to port 3305 if `ENV['ENABLE_PSDB']` is true.
+2. Use production database name if `ENV['ENABLE_PSDB']` is true.
+
+Here is an example
+
+```
+development:
+  <<: *default
+  database: <%= ENV['ENABLE_PSDB'] ? 'your_production_db_name' : 'your_development_db_name' %>
+  port: <%= ENV['ENABLE_PSDB'] ? 3305 : ENV.fetch("DB_PORT", 3306) %>
+```
+
 ## Usage
 
 First, make sure you have the [`pscale` CLI installed](https://github.com/planetscale/cli#installation). You'll use `pscale` to create a new branch.
