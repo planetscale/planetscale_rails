@@ -45,7 +45,7 @@ that this is the branch you want to migrate.
 pscale branch switch my-new-branch-name --database my-db-name --create
 ```
 
-**Tip:** In your database settings. Enable "Automatically copy migration data." Select "Rails/Phoenix" as the migration framework. This will auto copy your `schema_migrations` table between branches.
+**Tip:** In your database settings. Enable "Automatically copy migration data." Select "Rails" as the migration framework. This will auto copy your `schema_migrations` table between branches.
 
 2. Once your branch is ready, you can then use the `psdb` rake task to connect to your branch and run `db:migrate`.
 
