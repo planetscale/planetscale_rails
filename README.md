@@ -88,6 +88,9 @@ pscale deploy-request create database-name my-new-branch-name
 
 4. To get your schema change to production, run the deploy request. Then, once it's complete, you can merge your code changes into your `main` branch in git and deploy your application code.
 
+## Usage with GitHub Actions
+
+See the [GitHub Actions examples](actions-example.md) doc for ways to automate your schema migrations with PlanetScale + Actions.
 
 ## Development
 
