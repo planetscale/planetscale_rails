@@ -88,7 +88,6 @@ namespace :psdb do
         if branch.blank? || database.blank?
           raise "Your branch is not properly setup, please switch to a branch by using the CLI."
         end
-        raise "Unable to run migrations against the main branch" if branch == "main"
 
         config = Rails.configuration.database_configuration[Rails.env][name]
 
