@@ -89,12 +89,12 @@ namespace :psdb do
     end
   end
 
-  desc "Create credentials for PlanetScale"
+  desc "Create credentials for PlanetScale and sets them to ENV['PSCALE_DATABASE_URL']"
   task "create_creds" => %i[environment check_ci] do
     ENV["PSCALE_DATABASE_URL"] = create_connection_string
   end
 
-  desc "Migrate the database for current environment"
+  desc "Connects to the current PlanetScale branch and runs rails db:migrate"
   task migrate: %i[environment check_ci create_creds] do
     db_configs = ActiveRecord::Base.configurations.configs_for(env_name: ActiveRecord::Tasks::DatabaseTasks.env)
 
@@ -114,7 +114,7 @@ namespace :psdb do
 
   namespace :migrate do
     ActiveRecord::Tasks::DatabaseTasks.for_each(databases) do |name|
-      desc "Migrate #{name} database for current environment"
+      desc "Connects to the current PlanetScale branch and runs rails db:migrate:#{name}"
       task name => %i[environment check_ci create_creds] do
         puts "Running migrations..."
 
@@ -132,7 +132,7 @@ namespace :psdb do
   namespace :schema do
     namespace :load do
       ActiveRecord::Tasks::DatabaseTasks.for_each(databases) do |name|
-        desc "Load the current schema into the #{name} database"
+        desc "Connects to the current PlanetScale branch and runs rails db:schema:load:#{name}"
         task name => %i[environment check_ci create_creds] do
           puts "Loading schema..."
 
@@ -147,10 +147,30 @@ namespace :psdb do
     end
   end
 
+  desc "Connects to the current PlanetScale branch and runs rails db:rollback"
+  task rollback: %i[environment check_ci create_creds] do
+    db_configs = ActiveRecord::Base.configurations.configs_for(env_name: ActiveRecord::Tasks::DatabaseTasks.env)
+
+    unless db_configs.size == 1
+      raise "Found multiple database configurations, please specify which database you want to rollback using `psdb:rollback:<database_name>`".colorize(:red)
+    end
+
+    Kernel.system("DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:rollback")
+  ensure
+    delete_password
+  end
+
   namespace :rollback do
     ActiveRecord::Tasks::DatabaseTasks.for_each(databases) do |name|
-      desc "Rollback #{name} database for current environment"
+      desc "Connects to the current PlanetScale branch and runs rails db:rollback:#{name}"
       task name => %i[environment check_ci create_creds] do
+        required_version = Gem::Version.new("6.1.0.0")
+        rails_version = Gem::Version.new(Rails.version)
+
+        if rails_version < required_version
+          rails "This version of Rails does not support rollback commands for multi-database Rails apps. Please upgrade to at least Rails 6.1"
+        end
+
         puts "Rolling back migrations..."
 
         name_env_key = "#{name.upcase}_DATABASE_URL"
