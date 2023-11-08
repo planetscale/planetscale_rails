@@ -111,7 +111,11 @@ namespace :psdb do
     puts "Running migrations..."
 
     command = "DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate"
-    `#{command}`
+    IO.popen(command) do |io|
+      io.each_line do |line|
+        puts line
+      end
+    end
 
     if $CHILD_STATUS.success?
       puts_deploy_request_instructions
@@ -131,7 +135,11 @@ namespace :psdb do
         name_env_key = "#{name.upcase}_DATABASE_URL"
         command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate:#{name}"
 
-        `#{command}`
+        IO.popen(command) do |io|
+          io.each_line do |line|
+            puts line
+          end
+        end
 
         if $CHILD_STATUS.success?
           puts_deploy_request_instructions
@@ -154,7 +162,11 @@ namespace :psdb do
           name_env_key = "#{name.upcase}_DATABASE_URL"
           command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:schema:load:#{name}"
 
-          `#{command}`
+          IO.popen(command) do |io|
+            io.each_line do |line|
+              puts line
+            end
+          end
 
           unless $CHILD_STATUS.success?
             puts "Failed to load schema".colorize(:red)
@@ -175,7 +187,12 @@ namespace :psdb do
     end
 
     command = "DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:rollback"
-    `#{command}`
+
+    IO.popen(command) do |io|
+      io.each_line do |line|
+        puts line
+      end
+    end
 
     unless $CHILD_STATUS.success?
       puts "Failed to rollback migrations".colorize(:red)
@@ -200,7 +217,11 @@ namespace :psdb do
         name_env_key = "#{name.upcase}_DATABASE_URL"
         command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:rollback:#{name}"
 
-        `#{command}`
+        IO.popen(command) do |io|
+          io.each_line do |line|
+            puts line
+          end
+        end
 
         unless $CHILD_STATUS.success?
           puts "Failed to rollback migrations".colorize(:red)
