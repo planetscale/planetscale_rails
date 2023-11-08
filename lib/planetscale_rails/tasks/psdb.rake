@@ -110,10 +110,14 @@ namespace :psdb do
 
     puts "Running migrations..."
 
-    Kernel.system("DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate")
+    command = "DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate"
+    `#{command}`
 
-    puts "Finished running migrations\n".colorize(:green)
-    puts_deploy_request_instructions
+    if $CHILD_STATUS.success?
+      puts_deploy_request_instructions
+    else
+      puts "Failed to run migrations".colorize(:red)
+    end
   ensure
     delete_password
   end
@@ -125,10 +129,15 @@ namespace :psdb do
         puts "Running migrations..."
 
         name_env_key = "#{name.upcase}_DATABASE_URL"
-        Kernel.system("#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate:#{name}")
+        command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate:#{name}"
 
-        puts "Finished running migrations\n".colorize(:green)
-        puts_deploy_request_instructions
+        `#{command}`
+
+        if $CHILD_STATUS.success?
+          puts_deploy_request_instructions
+        else
+          puts "Failed to run migrations".colorize(:red)
+        end
       ensure
         delete_password
       end
@@ -143,9 +152,13 @@ namespace :psdb do
           puts "Loading schema..."
 
           name_env_key = "#{name.upcase}_DATABASE_URL"
-          Kernel.system("#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:schema:load:#{name}")
+          command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:schema:load:#{name}"
 
-          puts "Finished loading schema."
+          `#{command}`
+
+          unless $CHILD_STATUS.success?
+            puts "Failed to load schema".colorize(:red)
+          end
         ensure
           delete_password
         end
@@ -161,7 +174,12 @@ namespace :psdb do
       raise "Found multiple database configurations, please specify which database you want to rollback using `psdb:rollback:<database_name>`".colorize(:red)
     end
 
-    Kernel.system("DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:rollback")
+    command = "DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:rollback"
+    `#{command}`
+
+    unless $CHILD_STATUS.success?
+      puts "Failed to rollback migrations".colorize(:red)
+    end
   ensure
     delete_password
   end
@@ -180,9 +198,13 @@ namespace :psdb do
         puts "Rolling back migrations..."
 
         name_env_key = "#{name.upcase}_DATABASE_URL"
-        Kernel.system("#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:rollback:#{name}")
+        command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:rollback:#{name}"
 
-        puts "Finished rolling back migrations.".colorize(:green)
+        `#{command}`
+
+        unless $CHILD_STATUS.success?
+          puts "Failed to rollback migrations".colorize(:red)
+        end
       ensure
         delete_password
       end
