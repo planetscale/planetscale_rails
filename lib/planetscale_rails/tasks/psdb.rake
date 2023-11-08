@@ -79,7 +79,13 @@ namespace :psdb do
       password = response["plain_text"]
       ENV["PSCALE_PASSWORD_ID"] = response["id"]
 
-      "mysql2://#{username}:#{password}@#{host}:3306/#{database}"
+      adapter = "mysql2"
+
+      if defined?(Trilogy)
+        adapter = "trilogy"
+      end
+
+      "#{adapter}://#{username}:#{password}@#{host}:3306/#{database}?ssl_mode=VERIFY_IDENTITY"
     else
       puts "Failed to create credentials for PlanetScale #{db_branch_colorized(database, branch)}"
       puts "Command: #{command}"
