@@ -15,7 +15,6 @@ against it. See [usage](#usage) for details.
 rake psdb:migrate                    # Migrate the database for current environment
 rake psdb:rollback                   # Rollback primary database for current environment
 rake psdb:schema:load                # Load the current schema into the database
-rake psdb:setup_pscale               # Setup a proxy to connect to PlanetScale
 ```
 
 ## Installation
@@ -34,22 +33,6 @@ And then execute in your terminal:
 bundle install
 ```
 
-### Update database.yml
-
-In your application's `database.yml`, you'll need to make two changes. This will allow the app to run migrations via a connection setup by the pscale CLI.
-
-1. Swap to port 3305 if `ENV['ENABLE_PSDB']` is true.
-2. Use production database name if `ENV['ENABLE_PSDB']` is true.
-
-Here is an example
-
-```
-development:
-  <<: *default
-  database: <%= ENV['ENABLE_PSDB'] ? 'your_production_db_name' : 'your_development_db_name' %>
-  port: <%= ENV['ENABLE_PSDB'] ? 3305 : ENV.fetch("DB_PORT", 3306) %>
-```
-
 ## Usage
 
 First, make sure you have the [`pscale` CLI installed](https://github.com/planetscale/cli#installation). You'll use `pscale` to create a new branch.
@@ -58,12 +41,13 @@ First, make sure you have the [`pscale` CLI installed](https://github.com/planet
 that this is the branch you want to migrate.
 
 ```
-pscale branch switch my-new-branch-name --database my-db-name --create
+pscale branch switch my-new-branch-name --database my-db-name --create --wait
 ```
 
 **Tip:** In your database settings. Enable "Automatically copy migration data." Select "Rails" as the migration framework. This will auto copy your `schema_migrations` table between branches.
 
-2. Once your branch is ready, you can then use the `psdb` rake task to connect to your branch and run `db:migrate`.
+2. Once your branch is ready, you can then use the `psdb` rake task to connect to your branch and run `db:migrate`. The command will run against
+the branch specified in your `.pscale.yml` file.
 
 ```
 bundle exec rails psdb:migrate
@@ -74,8 +58,6 @@ If you run multiple databases in your Rails app, you can specify the DB name.
 ```
 bundle exec rails psdb:migrate:primary
 ```
-
-This will connect to the branch that you created, and run migrations against the branch.
 
 If you make a mistake, you can use `bundle exec rails psdb:rollback` to rollback the changes on your PlanetScale branch.
 
