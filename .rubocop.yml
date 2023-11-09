@@ -12,6 +12,12 @@ Style/StringLiteralsInInterpolation:
 Layout/LineLength:
   Max: 180
 
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
 Metrics/BlockLength:
   Enabled: false
 
