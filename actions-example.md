@@ -18,7 +18,7 @@ Secrets needed to be set:
 - `PLANETSCALE_SERVICE_TOKEN_ID`
 - `PLANETSCALE_SERVICE_TOKEN`
 
-The PlanetScale service token must have the `connect_branch`, `create_branch`, `read_branch`, `create_deploy_request`, and `read_deploy_request` permissions on the database.
+The PlanetScale service token must have the `connect_branch`, `create_branch`, `delete_branch_password`, `read_branch`, `create_deploy_request`, and `read_deploy_request` permissions on the database.
 
 ```yaml
 name: Run database migrations
