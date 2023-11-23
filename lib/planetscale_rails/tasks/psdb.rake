@@ -209,7 +209,7 @@ namespace :psdb do
         rails_version = Gem::Version.new(Rails.version)
 
         if rails_version < required_version
-          rails "This version of Rails does not support rollback commands for multi-database Rails apps. Please upgrade to at least Rails 6.1"
+          raise "This version of Rails does not support rollback commands for multi-database Rails apps. Please upgrade to at least Rails 6.1"
         end
 
         puts "Rolling back migrations..."
