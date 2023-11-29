@@ -85,7 +85,15 @@ namespace :psdb do
         adapter = "trilogy"
       end
 
-      "#{adapter}://#{username}:#{password}@#{host}:3306/#{database}?ssl_mode=VERIFY_IDENTITY"
+      # Check common CA paths for certs.
+      ssl_ca_path = %w[/etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt /etc/ssl/ca-bundle.pem /etc/ssl/cert.pem].find { |f| File.exist?(f) }
+      url = "#{adapter}://#{username}:#{password}@#{host}:3306/#{database}?ssl_mode=VERIFY_IDENTITY"
+
+      if ssl_ca_path
+        url += "&ssl_ca=#{ssl_ca_path}"
+      end
+
+      url
     else
       puts "Failed to create credentials for PlanetScale #{db_branch_colorized(database, branch)}"
       puts "Command: #{command}"
