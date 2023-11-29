@@ -118,7 +118,7 @@ namespace :psdb do
 
     puts "Running migrations..."
 
-    command = "DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate"
+    command = "DATABASE_URL=\"#{ENV["PSCALE_DATABASE_URL"]}\" bundle exec rails db:migrate"
     IO.popen(command) do |io|
       io.each_line do |line|
         puts line
@@ -141,7 +141,7 @@ namespace :psdb do
         puts "Running migrations..."
 
         name_env_key = "#{name.upcase}_DATABASE_URL"
-        command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:migrate:#{name}"
+        command = "#{name_env_key}=\"#{ENV["PSCALE_DATABASE_URL"]}\" bundle exec rails db:migrate:#{name}"
 
         IO.popen(command) do |io|
           io.each_line do |line|
@@ -168,7 +168,7 @@ namespace :psdb do
           puts "Loading schema..."
 
           name_env_key = "#{name.upcase}_DATABASE_URL"
-          command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:schema:load:#{name}"
+          command = "#{name_env_key}=\"#{ENV["PSCALE_DATABASE_URL"]}\" bundle exec rake db:schema:load:#{name}"
 
           IO.popen(command) do |io|
             io.each_line do |line|
@@ -194,7 +194,7 @@ namespace :psdb do
       raise "Found multiple database configurations, please specify which database you want to rollback using `psdb:rollback:<database_name>`".colorize(:red)
     end
 
-    command = "DATABASE_URL=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rails db:rollback"
+    command = "DATABASE_URL=\"#{ENV["PSCALE_DATABASE_URL"]}\" bundle exec rails db:rollback"
 
     IO.popen(command) do |io|
       io.each_line do |line|
@@ -223,7 +223,7 @@ namespace :psdb do
         puts "Rolling back migrations..."
 
         name_env_key = "#{name.upcase}_DATABASE_URL"
-        command = "#{name_env_key}=#{ENV["PSCALE_DATABASE_URL"]} bundle exec rake db:rollback:#{name}"
+        command = "#{name_env_key}=\"#{ENV["PSCALE_DATABASE_URL"]}\" bundle exec rake db:rollback:#{name}"
 
         IO.popen(command) do |io|
           io.each_line do |line|
