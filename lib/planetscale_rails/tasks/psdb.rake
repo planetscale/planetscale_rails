@@ -62,7 +62,7 @@ namespace :psdb do
 
     raise "You must have `pscale` installed on your computer".colorize(:red) unless command?("pscale")
     if branch.blank? || database.blank?
-      raise "Could not determine which PlanetScale branch to use from .pscale.yml. Please switch to a branch by using: `pscale switch database-name branch-name`".colorize(:red)
+      raise "Could not determine which PlanetScale branch to use from .pscale.yml. Please switch to a branch by using: `pscale branch switch branch-name --database db-name --create --wait`".colorize(:red)
     end
 
     short_hash = SecureRandom.hex(2)[0, 4]
