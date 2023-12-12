@@ -68,6 +68,15 @@ pscale deploy-request create database-name my-new-branch-name
 
 4. To get your schema change to production, run the deploy request. Then, once it's complete, you can merge your code changes into your `main` branch in git and deploy your application code.
 
+## Using PlanetScale deploy requests vs `psdb:migrate` directly in production.
+
+PlanetScale's deploy requests [solve the schema change problem](https://planetscale.com/docs/learn/how-online-schema-change-tools-work). They make a normally high risk operation, safe. This is done by running your schema change using [Vitess's online schema change](https://vitess.io/docs/18.0/user-guides/schema-changes/) tools. Once the change is made, a deploy request is [also revertible without data loss](https://planetscale.com/blog/revert-a-migration-without-losing-data). None of this is possible when running `rails db:migrate` directly against your production database.
+
+We recommend using GitHub Actions to automate the creation of PlanetScale branches and deploy requests. Then when you are ready to merge, you can run the deploy request before merging in your code.
+
+**When not to use deploy requests**
+If your application has minimal data and schema changes are a low risk event, then running `psdb:migrate` directly against production is perfectly fine. As your datasize grows and your application becomes busier, the risk of schema changes increase and we highly recommend using the deploy request flow. It's the best way available to safely migrate your schema.
+
 ## Usage with GitHub Actions
 
 See the [GitHub Actions examples](actions-example.md) doc for ways to automate your schema migrations with PlanetScale + Actions.
