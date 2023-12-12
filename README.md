@@ -33,12 +33,11 @@ And then execute in your terminal:
 bundle install
 ```
 
+Make sure you have the [`pscale` CLI installed](https://github.com/planetscale/cli#installation).
+
 ## Usage
 
-First, make sure you have the [`pscale` CLI installed](https://github.com/planetscale/cli#installation). You'll use `pscale` to create a new branch.
-
-1. Run this locally, it will create a new branch off of `main`. The `switch` command will update a `.pscale.yml` file to track 
-that this is the branch you want to migrate.
+1. Using pscale, create a new branch. This command will create a local `.pscale.yml` file. You should add it to your `.gitignore`.
 
 ```
 pscale branch switch my-new-branch-name --database my-db-name --create --wait
@@ -46,8 +45,7 @@ pscale branch switch my-new-branch-name --database my-db-name --create --wait
 
 **Tip:** In your database settings. Enable "Automatically copy migration data." Select "Rails" as the migration framework. This will auto copy your `schema_migrations` table between branches.
 
-2. Once your branch is ready, you can then use the `psdb` rake task to connect to your branch and run `db:migrate`. The command will run against
-the branch specified in your `.pscale.yml` file.
+2. Run your schema migrations against the branch.
 
 ```
 bundle exec rails psdb:migrate
