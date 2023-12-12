@@ -75,6 +75,7 @@ PlanetScale's deploy requests [solve the schema change problem](https://planetsc
 We recommend using GitHub Actions to automate the creation of PlanetScale branches and deploy requests. Then when you are ready to merge, you can run the deploy request before merging in your code.
 
 **When not to use deploy requests**
+
 If your application has minimal data and schema changes are a low risk event, then running `psdb:migrate` directly against production is perfectly fine. As your datasize grows and your application becomes busier, the risk of schema changes increase and we highly recommend using the deploy request flow. It's the best way available to safely migrate your schema.
 
 ## Usage with GitHub Actions
