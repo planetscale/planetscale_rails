@@ -85,8 +85,7 @@ namespace :psdb do
         adapter = "trilogy"
       end
 
-      # Setting schema_dump to nil is intentional. It prevents Rails from creating a dump after running migrations.
-      url = "#{adapter}://#{username}:#{password}@#{host}:3306/#{database}?ssl_mode=VERIFY_IDENTITY&schema_dump="
+      url = "#{adapter}://#{username}:#{password}@#{host}:3306/#{database}?ssl_mode=VERIFY_IDENTITY"
 
       # Check common CA paths for certs.
       ssl_ca_path = %w[/etc/ssl/certs/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt /etc/ssl/ca-bundle.pem /etc/ssl/cert.pem].find { |f| File.exist?(f) }
@@ -108,6 +107,7 @@ namespace :psdb do
   desc "Create credentials for PlanetScale and sets them to ENV['PSCALE_DATABASE_URL']"
   task "create_creds" => %i[environment check_ci] do
     ENV["PSCALE_DATABASE_URL"] = create_connection_string
+    ENV["DISABLE_SCHEMA_DUMP"] = "true"
   end
 
   desc "Connects to the current PlanetScale branch and runs rails db:migrate"

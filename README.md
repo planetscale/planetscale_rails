@@ -35,6 +35,18 @@ bundle install
 
 Make sure you have the [`pscale` CLI installed](https://github.com/planetscale/cli#installation).
 
+### Disable schema dump
+
+Add the following to your `config/application.rb`.
+
+```ruby
+if ENV["DISABLE_SCHEMA_DUMP"]
+  config.active_record.dump_schema_after_migration = false
+end
+```
+
+This will allow the gem to disable schema dumping after running `psdb:migrate`.
+
 ## Usage
 
 1. Using pscale, create a new branch. This command will create a local `.pscale.yml` file. You should add it to your `.gitignore`.
