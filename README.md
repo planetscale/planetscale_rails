@@ -90,6 +90,15 @@ We recommend using GitHub Actions to automate the creation of PlanetScale branch
 
 If your application has minimal data and schema changes are a low risk event, then running `psdb:migrate` directly against production is perfectly fine. As your datasize grows and your application becomes busier, the risk of schema changes increase and we highly recommend using the deploy request flow. It's the best way available to safely migrate your schema.
 
+## How to safely drop a column
+
+Before dropping the column in your database, there are a couple steps to take in your application to safely remove the column without any risk to your production application.
+
+1. Remove all references to the column in your code.
+2. Add the column name to `self.ignored_columns += %w(column_name)` in the model. [More on ignored_columns](https://api.rubyonrails.org/classes/ActiveRecord/ModelSchema/ClassMethods.html#method-i-ignored_columns-3D).
+3. Deploy this code to production. This ensures your application is no longer making use of the column in production and it's removed from the schema cache.
+4. Follow the PlanetScale deploy request flow to drop the column.
+
 ## Usage with GitHub Actions
 
 See the [GitHub Actions examples](actions-example.md) doc for ways to automate your schema migrations with PlanetScale + Actions.
