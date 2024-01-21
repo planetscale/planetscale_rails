@@ -7,8 +7,34 @@ require "colorize"
 
 databases = ActiveRecord::Tasks::DatabaseTasks.setup_initial_database_yaml
 
+def find_git_directory
+  return ENV["GIT_DIR"] if ENV["GIT_DIR"] && !ENV["GIT_DIR"].empty?
+
+  # it's not set as an env, so let's try to find it
+  current_path = Pathname.new(Dir.pwd)
+
+  until current_path.root?
+    git_dir = current_path.join('.git')
+    return current_path.to_s if git_dir.exist? # this can be a directory or a file (worktree)
+    current_path = current_path.parent
+  end
+
+  nil
+end
+
+def load_pscale_config
+  if File.exist?(".pscale.yml")
+    return YAML.load_file(".pscale.yml")
+  end
+
+  # otherwise, look for a git root directory and load it from there
+  git_dir = find_git_directory
+  pscale_yaml_path = File.join(git_dir, ".pscale.yml")
+  YAML.load_file(pscale_yaml_path)
+end
+
 def puts_deploy_request_instructions
-  ps_config = YAML.load_file(".pscale.yml")
+  ps_config = load_pscale_config
   database = ps_config["database"]
   branch = ps_config["branch"]
   org = ps_config["org"]
@@ -25,7 +51,7 @@ def delete_password
   password_id = ENV["PSCALE_PASSWORD_ID"]
   return unless password_id
 
-  ps_config = YAML.load_file(".pscale.yml")
+  ps_config = load_pscale_config
   database = ps_config["database"]
   branch = ps_config["branch"]
 
@@ -56,7 +82,7 @@ namespace :psdb do
   end
 
   def create_connection_string
-    ps_config = YAML.load_file(".pscale.yml")
+    ps_config = load_pscale_config
     database = ps_config["database"]
     branch = ps_config["branch"]
 
