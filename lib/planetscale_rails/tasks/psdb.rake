@@ -14,8 +14,9 @@ def find_git_directory
   current_path = Pathname.new(Dir.pwd)
 
   until current_path.root?
-    git_dir = current_path.join('.git')
+    git_dir = current_path.join(".git")
     return current_path.to_s if git_dir.exist? # this can be a directory or a file (worktree)
+
     current_path = current_path.parent
   end
 
