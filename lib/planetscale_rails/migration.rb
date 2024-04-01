@@ -10,10 +10,8 @@ module PlanetscaleRails
       def create_table(table_name, **options)
         if ENV["ENABLE_PSDB"] && options[:keyspace].present?
           table_name = "#{options[:keyspace]}.#{table_name}"
-          super(table_name, **options.except(:keyspace))
-        else
-          super(table_name, **options.except(:keyspace))
         end
+        super(table_name, **options.except(:keyspace))
       end
     end
   end
