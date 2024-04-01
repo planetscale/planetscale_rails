@@ -80,6 +80,21 @@ pscale deploy-request create database-name my-new-branch-name
 
 4. To get your schema change to production, run the deploy request. Then, once it's complete, you can merge your code changes into your `main` branch in git and deploy your application code.
 
+## Usage with multiple keyspace (or sharded) databases
+
+This gem supports working with multi-keyspace PlanetScale databases. When running migrations, Vitess will automatically route the schema change (DDL) to the correct keyspace based on the name of the table being altered.
+
+**Creating new tables**
+
+For adding a new table, you must specify the `keyspace` for the table. When running `psdb:migrate`, this gem will create the table in the correct keyspace. When running the migration locally against plain MySQL,
+the keyspace will be ignored and the table will be created as normal within the same database.
+
+```ruby
+create_table(:correlation, id: { type: :bigint, unsigned: true, keyspace: "keyspace-name" }) do |t|
+  t.string(:database_branch_public_id, null: false, limit: 12)
+end
+```
+
 ## Using PlanetScale deploy requests vs `psdb:migrate` directly in production.
 
 PlanetScale's deploy requests [solve the schema change problem](https://planetscale.com/docs/learn/how-online-schema-change-tools-work). They make a normally high risk operation, safe. This is done by running your schema change using [Vitess's online schema change](https://vitess.io/docs/18.0/user-guides/schema-changes/) tools. Once the change is made, a deploy request is [also revertible without data loss](https://planetscale.com/blog/revert-a-migration-without-losing-data). None of this is possible when running `rails db:migrate` directly against your production database.
