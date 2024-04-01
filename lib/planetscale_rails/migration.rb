@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PlanetscaleRails
   module Migration
     module Current
@@ -6,7 +8,7 @@ module PlanetscaleRails
       #
       # For local MySQL databases, the keyspace is ignored.
       def create_table(table_name, **options)
-        if ENV['ENABLE_PSDB'] && options[:keyspace].present?
+        if ENV["ENABLE_PSDB"] && options[:keyspace].present?
           table_name = "#{options[:keyspace]}.#{table_name}"
           super(table_name, **options.except(:keyspace))
         else
