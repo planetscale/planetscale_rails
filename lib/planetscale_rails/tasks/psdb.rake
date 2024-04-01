@@ -135,6 +135,7 @@ namespace :psdb do
   task "create_creds" => %i[environment check_ci] do
     ENV["PSCALE_DATABASE_URL"] = create_connection_string
     ENV["DISABLE_SCHEMA_DUMP"] = "true"
+    ENV["ENABLE_PSDB"] = "true"
   end
 
   desc "Connects to the current PlanetScale branch and runs rails db:migrate"
