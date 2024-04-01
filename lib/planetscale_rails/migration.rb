@@ -12,7 +12,7 @@ module PlanetscaleRails
           table_name = "#{options[:keyspace]}.#{table_name}"
           super(table_name, **options.except(:keyspace))
         else
-          super(table_name, **options)
+          super(table_name, **options.except(:keyspace))
         end
       end
     end
