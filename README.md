@@ -90,8 +90,8 @@ For adding a new table, you must specify the `keyspace` for the table. When runn
 the keyspace will be ignored and the table will be created as normal within the same database.
 
 ```ruby
-create_table(:correlation, id: { type: :bigint, unsigned: true, keyspace: "keyspace-name" }) do |t|
-  t.string(:database_branch_public_id, null: false, limit: 12)
+create_table(:new_table, id: { type: :bigint, unsigned: true }, keyspace: "keyspace-name") do |t|
+  t.string :name
 end
 ```
 
