@@ -94,7 +94,7 @@ namespace :psdb do
 
     short_hash = SecureRandom.hex(2)[0, 4]
     password_name = "planetscale-rails-#{short_hash}"
-    command = "pscale password create #{database} #{branch} #{password_name} -f json #{ENV["SERVICE_TOKEN_CONFIG"]}"
+    command = "pscale password create #{database} #{branch} #{password_name} -f json --ttl 10m #{ENV["SERVICE_TOKEN_CONFIG"]}"
 
     output = `#{command}`
 
