@@ -29,5 +29,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "colorize", "~> 0.8.1"
-  spec.add_dependency "rails", ">= 6.0", "< 8"
+  spec.add_dependency "rails", ">= 6.0", "< 9"
 end
