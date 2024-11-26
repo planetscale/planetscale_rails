@@ -13,6 +13,13 @@ module PlanetscaleRails
         end
         super(table_name, **options.except(:keyspace))
       end
+
+      def drop_table(table_name, **options)
+        if ENV["ENABLE_PSDB"] && options[:keyspace].present?
+          table_name = "#{options[:keyspace]}.#{table_name}"
+        end
+        super(table_name, **options.except(:keyspace))
+      end
     end
   end
 end
