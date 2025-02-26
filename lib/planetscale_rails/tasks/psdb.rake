@@ -191,6 +191,30 @@ namespace :psdb do
   end
 
   namespace :schema do
+    desc "Connects to the current PlanetScale branch and runs rails db:schema:load"
+    task load: %i[environment check_ci create_creds] do
+      db_configs = ActiveRecord::Base.configurations.configs_for(env_name: ActiveRecord::Tasks::DatabaseTasks.env)
+
+      unless db_configs.size == 1
+        raise "Found multiple database configurations, please specify which database you want to load schema for using `psdb:schema:load:<database_name>`".colorize(:red)
+      end
+
+      puts "Loading schema..."
+
+      command = "DATABASE_URL=\"#{ENV["PSCALE_DATABASE_URL"]}\" bundle exec rails db:schema:load"
+      IO.popen(command) do |io|
+        io.each_line do |line|
+          puts line
+        end
+      end
+
+      unless $CHILD_STATUS.success?
+        puts "Failed to load schema".colorize(:red)
+      end
+    ensure
+      delete_password
+    end
+
     namespace :load do
       ActiveRecord::Tasks::DatabaseTasks.for_each(databases) do |name|
         desc "Connects to the current PlanetScale branch and runs rails db:schema:load:#{name}"
