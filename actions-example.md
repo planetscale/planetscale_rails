@@ -79,8 +79,8 @@ jobs:
         run: |
           bundle exec rails psdb:migrate > migration-output.txt
         env:
-          PSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
-          PSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
+          PLANETSCALE_SERVICE_TOKEN_ID: ${{ secrets.PLANETSCALE_SERVICE_TOKEN_ID }}
+          PLANETSCALE_SERVICE_TOKEN: ${{ secrets.PLANETSCALE_SERVICE_TOKEN }}
       - name: Open DR if migrations
         run: |
           if grep -q "migrated" migration-output.txt; then

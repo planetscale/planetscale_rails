@@ -72,11 +72,20 @@ end
 
 namespace :psdb do
   task check_ci: :environment do
-    use_service_token = ENV["PSCALE_SERVICE_TOKEN"] && ENV["PSCALE_SERVICE_TOKEN_ID"]
-    if ENV["CI"]
-      raise "For CI, you can only authenticate using service tokens." unless use_service_token
+    service_token = ENV["PSCALE_SERVICE_TOKEN"] || ENV["PLANETSCALE_SERVICE_TOKEN"]
+    service_token_id = ENV["PSCALE_SERVICE_TOKEN_ID"] || ENV["PLANETSCALE_SERVICE_TOKEN_ID"]
+    service_token_available = service_token && service_token_id
 
-      service_token_config = "--service-token #{ENV["PSCALE_SERVICE_TOKEN"]} --service-token-id #{ENV["PSCALE_SERVICE_TOKEN_ID"]}"
+    if ENV["CI"]
+      unless service_token_available
+        missing_vars = []
+        missing_vars << "PLANETSCALE_SERVICE_TOKEN" unless service_token
+        missing_vars << "PLANETSCALE_SERVICE_TOKEN_ID" unless service_token_id
+
+        raise "Unable to authenticate to PlanetScale. Missing environment variables: #{missing_vars.join(", ")}"
+      end
+
+      service_token_config = "--service-token #{service_token} --service-token-id #{service_token_id}"
 
       ENV["SERVICE_TOKEN_CONFIG"] = service_token_config
     end
