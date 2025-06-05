@@ -74,10 +74,10 @@ namespace :psdb do
   task check_ci: :environment do
     service_token = ENV["PSCALE_SERVICE_TOKEN"] || ENV["PLANETSCALE_SERVICE_TOKEN"]
     service_token_id = ENV["PSCALE_SERVICE_TOKEN_ID"] || ENV["PLANETSCALE_SERVICE_TOKEN_ID"]
-    use_service_token = service_token && service_token_id
+    service_token_available = service_token && service_token_id
 
     if ENV["CI"]
-      unless use_service_token
+      unless service_token_available
         missing_vars = []
         missing_vars << "PLANETSCALE_SERVICE_TOKEN" unless service_token
         missing_vars << "PLANETSCALE_SERVICE_TOKEN_ID" unless service_token_id
