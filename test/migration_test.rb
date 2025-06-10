@@ -66,6 +66,47 @@ class MigrationTest < Minitest::Test
     assert_equal({ id: :uuid }, @migration.last_options)
   end
 
+  def test_logs_when_using_env_keyspace
+    ENV["ENABLE_PSDB"] = "1"
+    ENV["PLANETSCALE_DEFAULT_KEYSPACE"] = "env_keyspace"
+    table_name = "users"
+    options = { id: :uuid }
+
+    output = capture_stdout do
+      @migration.create_table(table_name, **options)
+    end
+
+    # Should log when using environment variable
+    assert_includes output, "Using keyspace 'env_keyspace' from PLANETSCALE_DEFAULT_KEYSPACE environment variable"
+  end
+
+  def test_does_not_log_when_using_option_keyspace
+    ENV["ENABLE_PSDB"] = "1"
+    ENV["PLANETSCALE_DEFAULT_KEYSPACE"] = "env_keyspace"
+    table_name = "users"
+    options = { keyspace: "option_keyspace", id: :uuid }
+
+    output = capture_stdout do
+      @migration.create_table(table_name, **options)
+    end
+
+    # Should not log when using option keyspace
+    refute_includes output, "Using keyspace"
+  end
+
+  def test_logs_env_keyspace_even_without_enable_psdb
+    ENV["PLANETSCALE_DEFAULT_KEYSPACE"] = "env_keyspace"
+    table_name = "users"
+    options = { id: :uuid }
+
+    output = capture_stdout do
+      @migration.create_table(table_name, **options)
+    end
+
+    # Should still log when environment variable is used, even without ENABLE_PSDB
+    assert_includes output, "Using keyspace 'env_keyspace' from PLANETSCALE_DEFAULT_KEYSPACE environment variable"
+  end
+
   def test_create_table_option_keyspace_takes_precedence_over_env
     ENV["ENABLE_PSDB"] = "1"
     ENV["PLANETSCALE_DEFAULT_KEYSPACE"] = "env_keyspace"

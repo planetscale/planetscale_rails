@@ -5,6 +5,7 @@ $LOAD_PATH.unshift File.expand_path("../lib", __dir__)
 require "planetscale_rails"
 require "minitest/autorun"
 require "minitest/pride"
+require "stringio"
 
 # Add present? method to simulate Rails behavior
 class Object
@@ -52,4 +53,14 @@ class MockMigration < BaseMigration
   include PlanetscaleRails::Migration::Current
 
   attr_reader :last_table_name, :last_options
+end
+
+# Helper method to capture stdout
+def capture_stdout
+  original_stdout = $stdout
+  $stdout = StringIO.new
+  yield
+  output = $stdout.string
+  $stdout = original_stdout
+  output
 end
