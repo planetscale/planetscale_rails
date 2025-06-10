@@ -95,6 +95,8 @@ create_table(:new_table, id: { type: :bigint, unsigned: true }, keyspace: "keysp
 end
 ```
 
+_Optionally_: You can set a default keyspace for all new tables by setting PLANETSCALE_DEFAULT_KEYSPACE to the keyspace name. If a keyspace is not present in the `create_table` call, then the ENV var will be used when set.
+
 ## Using PlanetScale deploy requests vs `psdb:migrate` directly in production.
 
 PlanetScale's deploy requests [solve the schema change problem](https://planetscale.com/docs/learn/how-online-schema-change-tools-work). They make a normally high risk operation, safe. This is done by running your schema change using [Vitess's online schema change](https://vitess.io/docs/18.0/user-guides/schema-changes/) tools. Once the change is made, a deploy request is [also revertible without data loss](https://planetscale.com/blog/revert-a-migration-without-losing-data). None of this is possible when running `rails db:migrate` directly against your production database.
