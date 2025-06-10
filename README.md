@@ -86,7 +86,7 @@ This gem supports working with multi-keyspace PlanetScale databases. When runnin
 
 **Creating new tables**
 
-For adding a new table, you must specify the `keyspace` for the table. When running `psdb:migrate`, this gem will create the table in the correct keyspace. When running the migration locally against plain MySQL,
+For adding a new table, you must specify the `keyspace` for the table either as part of create_table or by setting an environment variable. When running `psdb:migrate`, this gem will create the table in the correct keyspace. When running the migration locally against plain MySQL,
 the keyspace will be ignored and the table will be created as normal within the same database.
 
 ```ruby
@@ -95,7 +95,12 @@ create_table(:new_table, id: { type: :bigint, unsigned: true }, keyspace: "keysp
 end
 ```
 
-_Optionally_: You can set a default keyspace for all new tables by setting PLANETSCALE_DEFAULT_KEYSPACE to the keyspace name. If a keyspace is not present in the `create_table` call, then the ENV var will be used when set.
+_Optionally_: You can set a default keyspace for all new tables by setting `PLANETSCALE_DEFAULT_KEYSPACE` to the keyspace name. If a keyspace is not present in the `create_table` call, then the ENV var will be used when set.
+
+The keyspace resolution follows this precedence:
+1. Explicit `keyspace:` option in create_table
+2. `PLANETSCALE_DEFAULT_KEYSPACE` environment variable
+3. No keyspace (standard behavior)
 
 ## Using PlanetScale deploy requests vs `psdb:migrate` directly in production.
 
