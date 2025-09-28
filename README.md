@@ -1,4 +1,4 @@
-# PlanetScale Rails
+# PlanetScale Rails (Vitess only)
 
 [![Gem Version](https://badge.fury.io/rb/planetscale_rails.svg)](https://badge.fury.io/rb/planetscale_rails)
 
@@ -124,6 +124,10 @@ Before dropping the column in your database, there are a couple steps to take in
 ## Usage with GitHub Actions
 
 See the [GitHub Actions examples](actions-example.md) doc for ways to automate your schema migrations with PlanetScale + Actions.
+
+## Does this gem work with PlanetScale for Postgres?
+
+No, this gem is currently for Vitess databases only. When using PlanetScale for Postgres we recommend running `RAILS_ENV=production rails db:migrate` before your production code deploys to make schema changes.
 
 ## Development
 
